@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 
 
-public class PlayerJumpEffect : MonoBehaviour, IGameOver
+public class PlayerJumpEffect : MonoBehaviour
 {
 
     [SerializeField] private LayerMask collisionLayer; // Layer to detect collisions with
@@ -19,12 +19,13 @@ public class PlayerJumpEffect : MonoBehaviour, IGameOver
     float jumpDistance = 5.0f;
     IJumpAnim jumpAnim;
     IKeyboardCntrlNone keyboardCntrlNone;
-    Vector3 originalPosition;
+    public IGameOver gameOver;
     bool isJumping = false;
     void Start()
     {
         jumpAnim = GetComponent<IJumpAnim>();
         keyboardCntrlNone = GetComponent<IKeyboardCntrlNone>();
+       gameOver = GetComponent<IGameOver>();  
     }
     void Update()
     {
@@ -50,7 +51,7 @@ public class PlayerJumpEffect : MonoBehaviour, IGameOver
         else
         {
             keyboardCntrlNone.IdlePlayer();
-            GameOver();
+            MaxDistance();
             DistanceCover();
         }
 
@@ -65,12 +66,13 @@ public class PlayerJumpEffect : MonoBehaviour, IGameOver
 
         totalDistanceCovered += distanceThisFrame;
         jumpAnim.Jump();
+        gameOver.GameOver();
 
 
     }
 
 
-    public void GameOver()
+    public void MaxDistance()
     {
         if (totalDistanceCovered >= maxDistance)
         {

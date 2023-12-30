@@ -8,6 +8,9 @@ public class HologramSpaceboy : MonoBehaviour
     private Quaternion initialRotation;
     private Quaternion currentRotation;
     private bool isKeypadEnterPressed = false;
+    private bool hologramActive = false;
+    private float activationTime = 0f;
+    private float activationDuration = 2f; // Time duration for activation (2 seconds)
 
     private void Start()
     {
@@ -22,18 +25,32 @@ public class HologramSpaceboy : MonoBehaviour
         HandleArrowInput(KeyCode.LeftArrow, 0f, 180f, -90f);
         HandleArrowInput(KeyCode.RightArrow, 0f, 180f, 90f);
 
-        if (Input.GetKeyDown(KeyCode.Return) && isKeypadEnterPressed)
+      
+
+        // Check if the hologram has been active for more than 2 seconds
+        if (hologramActive && Time.time >= activationTime + activationDuration)
         {
-            ResetHologram();
+            isKeypadEnterPressed = false; // Allow re-activation
+            hologramActive = false;
+            spaceBoyHolo.SetActive(false);
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Return) && isKeypadEnterPressed)
+            {
+                ResetHologram();
+            }
         }
     }
 
     private void HandleArrowInput(KeyCode keyCode, float xRotation, float yRotation, float zRotation)
     {
-        if (Input.GetKeyDown(keyCode))
+        if (Input.GetKeyDown(keyCode) && !hologramActive)
         {
             ActivateHologram(xRotation, yRotation, zRotation);
             isKeypadEnterPressed = true;
+            hologramActive = true;
+            activationTime = Time.time; // Record activation time
         }
     }
 
@@ -49,8 +66,9 @@ public class HologramSpaceboy : MonoBehaviour
         spaceBoyHolo.transform.rotation = initialRotation;
         spaceBoyHolo.SetActive(false);
         isKeypadEnterPressed = false;
+        hologramActive = false;
 
-        spaceBoy.transform.position += new Vector3(1,1,1);
+        spaceBoy.transform.position += new Vector3(1, 1, 1);
         spaceBoy.transform.rotation = currentRotation;
     }
 }

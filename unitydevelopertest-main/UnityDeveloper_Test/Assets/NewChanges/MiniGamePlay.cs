@@ -1,42 +1,29 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MiniGamePlay : MonoBehaviour
 {
-    public TMP_Text timerText;
-    public int maxItems = 5; 
-    public float timeLimit = 120.0f; 
-
-    private int collectedItems = 0;
+    [SerializeField] private float initialCountdownTime = 120.0f; // 2 minutes in seconds
     private float countdownTime;
     private bool timerRunning = false;
     public Button PlayBtn;
+    public TMP_Text timerText;
+    public GameObject[] Coin;
+
+    IGameOver gameOver;
+    IGameStart gameStart;
+
     void Start()
     {
-        StartRace();
+        gameOver = GetComponent<IGameOver>();
+        gameStart = GetComponent<IGameStart>();
       
+        countdownTime = initialCountdownTime;
+        StartRace();
     }
 
-    void StartRace()
-    {
-        PlayBtn.onClick.AddListener(StartRaceIndication);
-
-    }
-
-
-    public void StartRaceIndication()
-    {
-        countdownTime = timeLimit;
-        timerRunning = true;
-       
-
-        StartCoroutine(Countdown());
-
-        Debug.Log("Button clicked");
-    }
     IEnumerator Countdown()
     {
         while (timerRunning)
@@ -53,29 +40,31 @@ public class MiniGamePlay : MonoBehaviour
 
             if (countdownTime <= 0)
             {
+                gameOver.GameOver();
                 timerRunning = false;
                 timerText.text = "00:00";
-              
-                Debug.Log("Time's up! You did not collect all items in time.");
+                Coin[0].SetActive(false);
+                ResetTimer();
             }
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void StartRace()
     {
-        if (other.CompareTag("Collectible"))
-        {
-            collectedItems++;
-            Destroy(other.gameObject); 
+        PlayBtn.onClick.AddListener(StartRaceIndication);
+    }
 
-            if (collectedItems >= maxItems)
-            {
-                timerRunning = false;
-                countdownTime = 0;
-                timerText.text = "00:00";
-              
-                Debug.Log("All items collected within the time limit!");
-            }
-        }
+    public void StartRaceIndication()
+    {
+        timerRunning = true;
+        Coin[0].SetActive(true);
+        gameStart.GameStart();
+        StartCoroutine(Countdown());
+    }
+
+    
+    void ResetTimer()
+    {
+        countdownTime = initialCountdownTime;
     }
 }

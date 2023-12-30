@@ -22,6 +22,12 @@ public interface IGameOver
 
 }
 
+public interface IGameStart
+{
+    void GameStart();
+}
+
+
 public interface IJumpAnim
 {
     void Jump();
