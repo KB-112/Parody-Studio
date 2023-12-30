@@ -12,8 +12,13 @@ public class HologramSpaceboy : MonoBehaviour
     private float activationTime = 0f;
     private float activationDuration = 2f; // Time duration for activation (2 seconds)
 
+
+    IRayDetection rayDetection;
+
+
+
     private void Start()
-    {
+    {rayDetection = GetComponent<IRayDetection>();
         initialRotation = spaceBoy.transform.rotation;
         currentRotation = initialRotation;
     }
@@ -26,7 +31,7 @@ public class HologramSpaceboy : MonoBehaviour
         HandleArrowInput(KeyCode.RightArrow, 0f, 180f, 90f);
 
       
-
+        
         // Check if the hologram has been active for more than 2 seconds
         if (hologramActive && Time.time >= activationTime + activationDuration)
         {
@@ -39,6 +44,7 @@ public class HologramSpaceboy : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Return) && isKeypadEnterPressed)
             {
                 ResetHologram();
+                rayDetection.DistanceCheck();
             }
         }
     }
