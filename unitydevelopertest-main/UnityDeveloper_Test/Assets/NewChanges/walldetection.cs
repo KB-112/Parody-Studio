@@ -1,78 +1,82 @@
-using Unity.VisualScripting;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using static UnityEngine.InputManagerEntry;
 
 public class walldetection : MonoBehaviour,IRayDetection
 {
     public float rayDistance = 1.0f;
     public LayerMask layerMask;
     public float speed;
-    bool stop = false;
-    public float distanceThreshold = 2.0f;
+  
+    public Vector3 distanceThreshold ;
     public Transform player;
-    public float nearwall;
-    float distance;
+
+   
     public Vector3 rayRotation;
+    [SerializeField] private List<GameObject> hitobj = new List<GameObject>();
 
-    private void Update()
-    {
-        MoveObjectDown();
-      
-    }
-
+    Vector3 forwardNoY;
     public void DistanceCheck()
     {
+       CheckHitbjPos();
+        
+
+    }
+
+  
+    void CheckHitbjPos()
+    {
         RaycastHit hit;
-        Vector3 forwardNoY = Quaternion.Euler(rayRotation) * Vector3.forward;
-        stop = true;
+        Vector3 forwardNoY = player.TransformDirection(rayRotation.normalized);
         if (Physics.Raycast(player.transform.position, forwardNoY, out hit, rayDistance, layerMask))
         {
             Debug.Log("hit");
 
-            float distanceY = Mathf.Abs(player.transform.position.y - hit.point.y);
-            Debug.Log("distance" + distanceY);
-
-            if (distanceY <= distanceThreshold)
+           
+            Transform hitTransform = hit.transform;
+            if (hitTransform != null)
             {
-                stop = false;
-                Debug.Log("on stop distance" + distanceY);
+                Debug.Log("Transform of the hit object: " + hitTransform.name);
+              GameObject find =  GameObject.Find(hitTransform.name);
+                hitobj.Add(find);
+                Debug.Log("hit point pos" + find.transform.position);
+             
+             
+                MoveObject(hitobj[0].transform.position);
+              
             }
+
+            
         }
+
     }
 
-  
-    private void MoveObjectDown()
+
+    private void MoveObject(Vector3 targetPosition)
     {
-        if (stop)
+        StartCoroutine(MovePlayerSmoothly(targetPosition));
+    }
+
+    private IEnumerator MovePlayerSmoothly(Vector3 targetPosition)
+    {
+        while ( player.transform.position != targetPosition )
         {
             float translation = speed * Time.deltaTime;
-            player.transform.Translate(Vector3.down * translation);
-
-
-           
+            player.transform.position = Vector3.MoveTowards(player.position, targetPosition-distanceThreshold, translation);
+        
+            yield return null;
         }
-        RaycastHit hit;
-        Vector3 forwardNoY = Quaternion.Euler(rayRotation) * Vector3.forward;
-        if (Physics.Raycast(player.transform.position, forwardNoY, out hit, rayDistance, layerMask))
-            {
-                Debug.Log("hit");
 
-                float distanceY = Mathf.Abs(player.transform.position.y - hit.point.y);
-                Debug.Log("distance" + distanceY);
-
-                if (distanceY <= distanceThreshold)
-                {
-                    stop = false;
-                    Debug.Log("on stop distance" + distanceY);
-                }
-            }
-        
-        
+        Debug.Log("Player reached the target position or movement was stopped.");
     }
-
 
     private void OnDrawGizmos()
     {
+        Vector3 forward = player.TransformDirection(rayRotation.normalized);
+
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(rayRotation) * Vector3.forward * rayDistance);
+        Gizmos.DrawLine(player.position, player.position + forward * rayDistance);
     }
 }
