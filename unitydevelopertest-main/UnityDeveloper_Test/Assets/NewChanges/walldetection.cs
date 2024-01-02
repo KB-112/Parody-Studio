@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+
 using UnityEngine;
-using static UnityEngine.InputManagerEntry;
 
 public class walldetection : MonoBehaviour,IRayDetection
 {
@@ -17,16 +16,8 @@ public class walldetection : MonoBehaviour,IRayDetection
     public Vector3 rayRotation;
     [SerializeField] private List<GameObject> hitobj = new List<GameObject>();
 
-    Vector3 forwardNoY;
+
     public void DistanceCheck()
-    {
-       CheckHitbjPos();
-        
-
-    }
-
-  
-    void CheckHitbjPos()
     {
         RaycastHit hit;
         Vector3 forwardNoY = player.TransformDirection(rayRotation.normalized);
@@ -34,25 +25,37 @@ public class walldetection : MonoBehaviour,IRayDetection
         {
             Debug.Log("hit");
 
-           
+
             Transform hitTransform = hit.transform;
             if (hitTransform != null)
             {
                 Debug.Log("Transform of the hit object: " + hitTransform.name);
-              GameObject find =  GameObject.Find(hitTransform.name);
+                GameObject find = GameObject.Find(hitTransform.name);
                 hitobj.Add(find);
                 Debug.Log("hit point pos" + find.transform.position);
+                if ((hitobj[0].transform.position.x) < 0 || (hitobj[0].transform.position.y) < 0 || (hitobj[0].transform.position.z < 0))
+                {
+                    Debug.Log("Less than zero transform");
+                    MoveObject(hitobj[0].transform.position) ;
+                }
+                else
+                {
+                    Debug.Log("greater than zero");
+                  
+                    MoveObject(hitobj[0].transform.position) ;
+
+                }
              
-             
-                MoveObject(hitobj[0].transform.position);
-              
+
             }
 
-            
+
         }
+
 
     }
 
+  
 
     private void MoveObject(Vector3 targetPosition)
     {
@@ -64,8 +67,9 @@ public class walldetection : MonoBehaviour,IRayDetection
         while ( player.transform.position != targetPosition )
         {
             float translation = speed * Time.deltaTime;
-            player.transform.position = Vector3.MoveTowards(player.position, targetPosition-distanceThreshold, translation);
-        
+           player.transform.position = Vector3.MoveTowards(player.position, targetPosition , translation);
+            
+
             yield return null;
         }
 
