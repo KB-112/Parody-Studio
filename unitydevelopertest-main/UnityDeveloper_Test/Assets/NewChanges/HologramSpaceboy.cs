@@ -3,78 +3,73 @@ using UnityEngine;
 public class HologramSpaceboy : MonoBehaviour
 {
     [SerializeField] private GameObject spaceBoy;
-   
+
     private IRayDetection rayDetection;
 
+    private float rotationEffectAngle = 90f;
+    [SerializeField] private float rotationalSpeed;
+    private Quaternion targetRotation;
+    private bool rotationInProgress = false;
 
     private void Start()
     {
         rayDetection = GetComponent<IRayDetection>();
-       
+        rotationInProgress = false;
     }
 
     private void Update()
     {
-        HandleArrowInput(90f);
-        
+        if (!rotationInProgress)
+        {
+            HandleArrowInput();
+        }
+        else
+        {
+            spaceBoy.transform.rotation = Quaternion.RotateTowards(spaceBoy.transform.rotation, targetRotation, Time.deltaTime * rotationalSpeed * 10);
+
+            if (Quaternion.Angle(spaceBoy.transform.rotation, targetRotation) < 0.01f)
+            {
+                rotationInProgress = false;
+                rayDetection.DistanceCheck();
+            }
+        }
     }
 
-    private void HandleArrowInput(float zRotation)
+    private void HandleArrowInput()
     {
         float currentYPosition = spaceBoy.transform.rotation.eulerAngles.y;
-       
-      
-        if (Input.GetKeyDown(KeyCode.RightArrow)|| Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.UpArrow)|| Input.GetKeyDown(KeyCode.DownArrow))
+
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) ||
+            Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-          
-            ActivateHologram(zRotation, currentYPosition, zRotation);
-         
+            ActivateHologram(rotationEffectAngle, currentYPosition, rotationEffectAngle);
         }
-     
     }
 
     private void ActivateHologram(float xRotation, float yPosition, float zRotation)
     {
-        float currentZRotation = spaceBoy.transform.rotation.eulerAngles.z;
-        float newZRotation = currentZRotation;
-  
+        float currentZRotation = Mathf.Repeat(spaceBoy.transform.rotation.eulerAngles.z, 360f);
+        float currentXRotation = Mathf.Repeat(spaceBoy.transform.rotation.eulerAngles.x, 360f);
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            newZRotation += zRotation;
+            currentZRotation += zRotation;
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            newZRotation -= zRotation;
+            currentZRotation -= zRotation;
         }
-
-        
-        newZRotation = Mathf.Repeat(newZRotation, 360f);
-
-
-
-
-        float currentxRotation = spaceBoy.transform.rotation.eulerAngles.x;
-        float newxRotation = currentxRotation;
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            newxRotation += xRotation;
+            currentXRotation += xRotation;
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            newxRotation -= xRotation;
+            currentXRotation -= xRotation;
         }
-
-
-        newxRotation = Mathf.Repeat(newxRotation, 360f);
-        
-
-
-
-        Quaternion targetRotation = Quaternion.Euler(newxRotation, yPosition, newZRotation);
-        spaceBoy.transform.rotation = targetRotation;
+        spaceBoy.transform.position += new Vector3(1, 1, 1);
+        targetRotation = Quaternion.Euler(currentXRotation, yPosition, currentZRotation);
+        rotationInProgress = true;
     }
-
-
 }
-

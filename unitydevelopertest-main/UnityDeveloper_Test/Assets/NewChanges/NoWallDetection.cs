@@ -7,25 +7,43 @@ public class NoWallDetection : MonoBehaviour
     public Transform[] player;
     public Vector3 rayRotation;
     public float rayDistance;
-    public LayerMask layerMask;
+    public float speed;
 
+    public LayerMask floorMask;
+  
     private void Update()
     {
-        CheckHitbjPos();
+        
+        CheckHitPos();
+        
+
     }
-    void CheckHitbjPos()
+
+    void CheckHitPos()
     {
+
         RaycastHit hit;
         Vector3 forwardNoY = player[0].TransformDirection(rayRotation.normalized);
-        if (!Physics.Raycast(player[0].transform.position, forwardNoY, out hit, rayDistance, layerMask))
+
+        if (Physics.Raycast(player[0].position, forwardNoY, out hit, rayDistance,floorMask))
         {
-            Debug.Log("Hiting in Empty Space");
 
-
-          
 
         }
+        else
+        {
+            Debug.Log("Hit empty space");
+            player[0].transform.Translate(Vector3.down * speed);
+            float pos = player[0].transform.position.y;
+            Debug.Log($"{pos}");
 
+            if (Mathf.Abs(pos) > 50)
+            {
+                Debug.Log("Game Over");
+
+            }
+
+        }
     }
     private void OnDrawGizmos()
     {

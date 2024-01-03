@@ -30,14 +30,20 @@ public interface IGameStart
 public interface IRayDetection
 {
     void DistanceCheck();
-    
+
 }
 
 
+public interface IMidAir
+{
+   void AnimationJump();
+    void StopJumpAnim();
+}
 
 public interface IJumpAnim
 {
     void Jump();
+
   
 
 }

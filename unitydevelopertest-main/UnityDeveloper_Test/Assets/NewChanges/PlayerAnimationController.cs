@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerAnimationController : MonoBehaviour, IKeyboardCntrl,IKeyboardCntrlNone, IJumpAnim
+public class PlayerAnimationController : MonoBehaviour, IKeyboardCntrl,IKeyboardCntrlNone, IJumpAnim,IMidAir
 {
     [SerializeField] private Animator spaceBoy;
    
@@ -42,5 +42,13 @@ public class PlayerAnimationController : MonoBehaviour, IKeyboardCntrl,IKeyboard
     public void Jump()
     {
         spaceBoy.SetBool("isJump", true);
+    }
+    public void StopJumpAnim()
+    {
+        spaceBoy.SetBool("isJump", false);
+    }
+    public void AnimationJump()
+    {
+        spaceBoy.SetBool("isRunning", false);
     }
 }

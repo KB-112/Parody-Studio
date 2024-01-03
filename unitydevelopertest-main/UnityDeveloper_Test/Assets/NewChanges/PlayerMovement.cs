@@ -9,11 +9,12 @@ public class PlayerMovement :MonoBehaviour, IKeyboardCntrl, IKeyboardCntrlNone
     public float runningspeed =0;
     public float rotateSpeed = 0;
 
-    public float jumpHeight = 2f;
+ 
 
     public static PlayerMovement instance;
     IKeyboardCntrlNone keyboardCntrlNone;
     IKeyboardCntrl keyboardCntrl;
+   
     private void Awake()
     {
         instance = this;
@@ -21,7 +22,7 @@ public class PlayerMovement :MonoBehaviour, IKeyboardCntrl, IKeyboardCntrlNone
 
     void Start()
     {
-         keyboardCntrlNone = GetComponent<IKeyboardCntrlNone>();
+        keyboardCntrlNone = GetComponent<IKeyboardCntrlNone>();
         keyboardCntrl = GetComponent<IKeyboardCntrl>();
     }
     void Update()
@@ -37,11 +38,14 @@ public class PlayerMovement :MonoBehaviour, IKeyboardCntrl, IKeyboardCntrlNone
     
     public void MoveForward()
     {
-        if (Input.GetKey(KeyCode.W) )
-        {         
-            spaceBoy.Translate(Vector3.forward * moveSpeed *runningspeed* Time.deltaTime);
 
-            keyboardCntrl.MoveForward();
+        if (Input.GetKey(KeyCode.W))
+        {
+           
+                spaceBoy.Translate(Vector3.forward * moveSpeed * runningspeed * Time.deltaTime);
+
+                keyboardCntrl.MoveForward();
+            
         }
     }
 

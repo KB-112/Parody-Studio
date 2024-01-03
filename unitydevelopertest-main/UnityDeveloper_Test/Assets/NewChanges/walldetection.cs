@@ -16,40 +16,45 @@ public class walldetection : MonoBehaviour,IRayDetection
     public Vector3 rayRotation;
     [SerializeField] private List<GameObject> hitobj = new List<GameObject>();
 
-
+    private bool isMoving = false;
+    
     public void DistanceCheck()
     {
+      if (!isMoving)
+      {
+
+        
         RaycastHit hit;
         Vector3 forwardNoY = player.TransformDirection(rayRotation.normalized);
-        if (Physics.Raycast(player.transform.position, forwardNoY, out hit, rayDistance, layerMask))
-        {
-            Debug.Log("hit");
-
-
-            Transform hitTransform = hit.transform;
-            if (hitTransform != null)
+            if (Physics.Raycast(player.transform.position, forwardNoY, out hit, rayDistance, layerMask))
             {
-                Debug.Log("Transform of the hit object: " + hitTransform.name);
-                GameObject find = GameObject.Find(hitTransform.name);
-                hitobj.Add(find);
-                Debug.Log("hit point pos" + find.transform.position);
-                if ((hitobj[0].transform.position.x) < 0 || (hitobj[0].transform.position.y) < 0 || (hitobj[0].transform.position.z < 0))
+                Debug.Log("hit");
+
+
+                Transform hitTransform = hit.transform;
+                if (hitTransform != null)
                 {
-                    Debug.Log("Less than zero transform");
-                    MoveObject(hitobj[0].transform.position) ;
-                }
-                else
-                {
-                    Debug.Log("greater than zero");
-                  
-                    MoveObject(hitobj[0].transform.position) ;
+                    Debug.Log("Transform of the hit object: " + hitTransform.name);
+                    GameObject find = GameObject.Find(hitTransform.name);
+                    hitobj.Add(find);
+                    Debug.Log("hit point pos" + find.transform.position);
+                    if ((hitobj[0].transform.position.x) < 0 || (hitobj[0].transform.position.y) < 0 || (hitobj[0].transform.position.z < 0))
+                    {
+                        Debug.Log("Less than zero transform");
+                        MoveObject(hitobj[0].transform.position);
+                    }
+                    else
+                    {
+                        Debug.Log("greater than zero");
+
+                        MoveObject(hitobj[0].transform.position);
+
+                    }
+
 
                 }
-             
 
             }
-
-
         }
 
 
@@ -64,6 +69,7 @@ public class walldetection : MonoBehaviour,IRayDetection
 
     private IEnumerator MovePlayerSmoothly(Vector3 targetPosition)
     {
+        isMoving = true;
         while ( player.transform.position != targetPosition )
         {
             float translation = speed * Time.deltaTime;
@@ -72,8 +78,9 @@ public class walldetection : MonoBehaviour,IRayDetection
 
             yield return null;
         }
-
+        isMoving = false;
         Debug.Log("Player reached the target position or movement was stopped.");
+      
     }
 
     private void OnDrawGizmos()
