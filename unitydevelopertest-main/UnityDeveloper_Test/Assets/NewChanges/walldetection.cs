@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 
 public class walldetection : MonoBehaviour,IRayDetection
@@ -34,22 +33,19 @@ public class walldetection : MonoBehaviour,IRayDetection
                 Transform hitTransform = hit.transform;
                 if (hitTransform != null)
                 {
-                    Debug.Log("Transform of the hit object: " + hitTransform.name);
-                    GameObject find = GameObject.Find(hitTransform.name);
-                    hitobj.Add(find);
-                    Debug.Log("hit point pos" + find.transform.position);
-                    if ((hitobj[0].transform.position.x) < 0 || (hitobj[0].transform.position.y) < 0 || (hitobj[0].transform.position.z < 0))
-                    {
-                        Debug.Log("Less than zero transform");
-                        MoveObject(hitobj[0].transform.position);
-                    }
-                    else
-                    {
-                        Debug.Log("greater than zero");
+                    Vector3 worldPosition = hit.point;
+                    Vector3 coordinates = new Vector3(worldPosition.x,
+                                                      worldPosition.y ,
+                                                      worldPosition.z) - new Vector3(distanceThreshold.x,   distanceThreshold.y, distanceThreshold.z); ;
 
-                        MoveObject(hitobj[0].transform.position);
+                    // Output the coordinates to the console
+                    Debug.Log("Coordinates at " + rayDistance + "m distance: " + coordinates);
+                  
+                    //---------------------------------------------------------------------------------------
+                 
+                     //  MoveObject(coordinates );
 
-                    }
+                    
 
 
                 }

@@ -46,30 +46,31 @@ public class HologramSpaceboy : MonoBehaviour
         }
     }
 
-    private void ActivateHologram(float xRotation, float yPosition, float zRotation)
+    private Quaternion ActivateHologram(float xRotation, float yPosition, float zRotation)
     {
-        float currentZRotation = Mathf.Repeat(spaceBoy.transform.rotation.eulerAngles.z, 360f);
-        float currentXRotation = Mathf.Repeat(spaceBoy.transform.rotation.eulerAngles.x, 360f);
+        Quaternion currentRotation = spaceBoy.transform.rotation;
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            currentZRotation += zRotation;
+            currentRotation = Quaternion.Euler(0, yPosition, currentRotation.eulerAngles.z + zRotation);
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            currentZRotation -= zRotation;
+            currentRotation = Quaternion.Euler(0, yPosition, currentRotation.eulerAngles.z - zRotation);
         }
-
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            currentXRotation += xRotation;
+            currentRotation *= Quaternion.Euler(xRotation, 0, 0); 
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            currentXRotation -= xRotation;
+            currentRotation *= Quaternion.Euler(-xRotation, 0, 0); 
         }
-        spaceBoy.transform.position += new Vector3(1, 1, 1);
-        targetRotation = Quaternion.Euler(currentXRotation, yPosition, currentZRotation);
+
+        targetRotation = currentRotation;
         rotationInProgress = true;
+        return currentRotation;
     }
+
+
 }
