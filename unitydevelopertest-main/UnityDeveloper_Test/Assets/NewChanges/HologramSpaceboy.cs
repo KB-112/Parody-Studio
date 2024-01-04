@@ -1,19 +1,22 @@
 using UnityEngine;
 
-public class HologramSpaceboy : MonoBehaviour
+public class HologramSpaceboy : MonoBehaviour, IRayDetection
 {
     [SerializeField] private GameObject spaceBoy;
 
-    private IRayDetection rayDetection;
+  
+   
 
     private float rotationEffectAngle = 90f;
     [SerializeField] private float rotationalSpeed;
     private Quaternion targetRotation;
     private bool rotationInProgress = false;
+    bool raycheck =false;
 
     private void Start()
     {
-        rayDetection = GetComponent<IRayDetection>();
+       
+        
         rotationInProgress = false;
     }
 
@@ -22,6 +25,7 @@ public class HologramSpaceboy : MonoBehaviour
         if (!rotationInProgress)
         {
             HandleArrowInput();
+            raycheck = false;
         }
         else
         {
@@ -30,11 +34,16 @@ public class HologramSpaceboy : MonoBehaviour
             if (Quaternion.Angle(spaceBoy.transform.rotation, targetRotation) < 0.01f)
             {
                 rotationInProgress = false;
-                rayDetection.DistanceCheck();
+                raycheck = true;
+              
+                
             }
         }
     }
-
+    public bool DistanceCheck()
+    {
+        return raycheck;
+    }
     private void HandleArrowInput()
     {
         float currentYPosition = spaceBoy.transform.rotation.eulerAngles.y;
@@ -42,7 +51,7 @@ public class HologramSpaceboy : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) ||
             Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            ActivateHologram(rotationEffectAngle, currentYPosition, rotationEffectAngle);
+            ActivateHologram(rotationEffectAngle, rotationEffectAngle, rotationEffectAngle);
         }
     }
 
@@ -52,11 +61,11 @@ public class HologramSpaceboy : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            currentRotation = Quaternion.Euler(0, yPosition, currentRotation.eulerAngles.z + zRotation);
+            currentRotation = Quaternion.Euler(0, yPosition, currentRotation.eulerAngles.z - zRotation);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            currentRotation = Quaternion.Euler(0, yPosition, currentRotation.eulerAngles.z - zRotation);
+            currentRotation = Quaternion.Euler(0, yPosition, currentRotation.eulerAngles.z  +zRotation);
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {

@@ -37,11 +37,6 @@ public class NoWallDetection : MonoBehaviour
             float pos = player[0].transform.position.y;
             Debug.Log($"{pos}");
 
-            if (Mathf.Abs(pos) > 50)
-            {
-                Debug.Log("Game Over");
-
-            }
 
         }
     }

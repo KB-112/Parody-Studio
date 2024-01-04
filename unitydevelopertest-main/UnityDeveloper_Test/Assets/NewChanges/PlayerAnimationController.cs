@@ -41,6 +41,7 @@ public class PlayerAnimationController : MonoBehaviour, IKeyboardCntrl,IKeyboard
     }
     public void Jump()
     {
+        Debug.Log("Jump anim true");
         spaceBoy.SetBool("isJump", true);
     }
     public void StopJumpAnim()
@@ -49,6 +50,7 @@ public class PlayerAnimationController : MonoBehaviour, IKeyboardCntrl,IKeyboard
     }
     public void AnimationJump()
     {
+        Debug.Log("MidAir");
         spaceBoy.SetBool("isRunning", false);
     }
 }

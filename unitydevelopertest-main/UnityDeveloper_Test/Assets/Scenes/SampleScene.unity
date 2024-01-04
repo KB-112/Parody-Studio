@@ -1821,12 +1821,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 195388597}
-  - component: {fileID: 195388610}
   - component: {fileID: 195388609}
   - component: {fileID: 195388601}
   - component: {fileID: 195388603}
   - component: {fileID: 195388600}
   - component: {fileID: 195388605}
+  - component: {fileID: 195388610}
   m_Layer: 0
   m_Name: Exo Gray (1)
   m_TagString: Untagged
@@ -1841,8 +1841,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 195388595}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -34.8, y: 3, z: -1.6}
+  m_LocalRotation: {x: 0, y: 0.0017452955, z: 0, w: 0.9999985}
+  m_LocalPosition: {x: -19.82, y: 16.6, z: -3.6}
   m_LocalScale: {x: 1.3094006, y: 1.3277315, z: 1.3094004}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1860,7 +1860,7 @@ Transform:
   - {fileID: 176876974}
   m_Father: {fileID: 0}
   m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0.2, z: 0}
 --- !u!95 &195388600
 Animator:
   serializedVersion: 5
@@ -1946,18 +1946,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 195388595}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75a25c3f94e98f64b9ca3b0a1fdc3f28, type: 3}
+  m_Script: {fileID: 11500000, guid: af765a2ea58bcff4b85b190488f4470a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDistance: 50
-  layerMask:
+  collisionLayer:
     serializedVersion: 2
     m_Bits: 64
-  speed: 20
-  distanceThreshold: {x: 0.5, y: 0.5, z: 0.5}
-  player: {fileID: 195388597}
+  playerPosition: {fileID: 195388597}
   rayRotation: {x: 0, y: -90, z: 0}
-  hitobj: []
+  rayDistance:
+  - 3
+  - 10
+  jumpHeight: 5
+  jumpSpeed: 10
+  jumpDistance: 5
 --- !u!1 &200652716
 GameObject:
   m_ObjectHideFlags: 0
@@ -12223,15 +12225,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75a25c3f94e98f64b9ca3b0a1fdc3f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDistance: 15.2
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  speed: 10
-  distanceThreshold: {x: 0, y: 0, z: 0}
-  player: {fileID: 1364232756}
-  rayRotation: {x: 90, y: 90, z: 0}
-  hitobj: []
 --- !u!1 &1368460057
 GameObject:
   m_ObjectHideFlags: 0
@@ -13305,7 +13298,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.0000002, y: 1, z: 1.0000002}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1482161502
 MeshRenderer:
@@ -13365,8 +13358,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1482161500}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -33.75, y: 7.07, z: -6.149999}
-  m_LocalScale: {x: 1, y: 13.49, z: 13.3}
+  m_LocalPosition: {x: -33.145844, y: 6.9808145, z: -6.149999}
+  m_LocalScale: {x: 1, y: 13.668373, z: 12.091687}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -16053,7 +16046,7 @@ Transform:
   m_GameObject: {fileID: 1744999490}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -33.75, y: 7.07, z: 6.150001}
-  m_LocalScale: {x: 1, y: 13.49, z: 13.3}
+  m_LocalScale: {x: 1, y: 39.01, z: 13.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

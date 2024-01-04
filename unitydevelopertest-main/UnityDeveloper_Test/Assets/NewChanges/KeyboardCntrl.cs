@@ -29,8 +29,13 @@ public interface IGameStart
 
 public interface IRayDetection
 {
-    void DistanceCheck();
+   bool DistanceCheck();
+  
 
+}
+public interface ICasualJump
+{
+   bool EmptySpaceJump();
 }
 
 
@@ -50,69 +55,3 @@ public interface IJumpAnim
 
 
 
-//public class KeyboardCntrl : IKeyboardCntrl
-//{
-//    public void Update()
-//    {
-//        HandleForwardInput();
-//        HandleBackwardInput();
-//        HandleLeftInput();
-//        HandleRightInput();
-//    }
-
-//    public void HandleForwardInput()
-//    {
-//        if (Input.GetKey(KeyCode.W))
-//        {
-//            MoveForward();
-//        }
-//    }
-
-//    public void HandleBackwardInput()
-//    {
-//        if (Input.GetKey(KeyCode.S))
-//        {
-//            MoveBackward();
-//        }
-//    }
-
-//    public void HandleLeftInput()
-//    {
-//        if (Input.GetKey(KeyCode.A))
-//        {
-//            RotateLeft();
-//        }
-//    }
-
-//    public void HandleRightInput()
-//    {
-//        if (Input.GetKey(KeyCode.D))
-//        {
-//            RotateRight();
-//        }
-//    }
-
-//    public void MoveForward()
-//    {
-
-//    }
-
-//    public void MoveBackward()
-//    {
-
-//    }
-
-//    public void RotateLeft()
-//    {
-
-//    }
-
-//    public void RotateRight()
-//    {
-
-//    }
-//
-
-
-
-//}
