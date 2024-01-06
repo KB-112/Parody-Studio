@@ -24,10 +24,10 @@ public class PlayerJump : MonoBehaviour
     IRayDetection rayDetection;
     private bool isJumping = false;
 
-    bool floorDetect = false;
+  
     float rayLength;
     bool isMoving =false;
-  
+    float constrainedYPosition;
     private void Start()
     {
         InitializeComponents();
@@ -47,27 +47,26 @@ public class PlayerJump : MonoBehaviour
         if (rayDetection.DistanceCheck())
         {
             rayLength = rayDistance[1];
-            isMoving = true;
+           
            
         }
-           
-   
-         RaycastHit hit;
+        isMoving = true;
+
+        RaycastHit hit;
         Vector3 forwardNoY = playerPosition.TransformDirection(rayRotation.normalized);
         if (Physics.Raycast(playerPosition.position, forwardNoY, out hit, rayLength, collisionLayer))
         {
             
             midAir.StopJumpAnim();           
             MovePlayerSmoothly(FindCoordinate(hit.point));
-            floorDetect = false;
-          
+           
         }
         else
         {
-            jumpAnim?.Jump();
-            midAir.AnimationJump();
-            floorDetect = true;
-            MovePlayerSmoothly(FindCoordinate(hit.point));
+            //jumpAnim?.Jump();
+          //  midAir.AnimationJump();
+           
+         
 
         }
     }
@@ -94,6 +93,7 @@ public class PlayerJump : MonoBehaviour
             if (distance > 0.001f) 
             {
                 playerPosition.transform.position = Vector3.MoveTowards(playerPosition.position, targetPosition, translation);
+                
             }
             else
             {

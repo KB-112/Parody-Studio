@@ -1,112 +1,61 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class walldetection : MonoBehaviour
 {
-    //public float rayDistance = 1.0f;
-    //public LayerMask layerMask;
-    //public float speed;
-  
-    //public Vector3 distanceThreshold ;
-    //public Transform player;
+    [SerializeField] private float raycastDistance = 1.0f;
+    [SerializeField] private LayerMask layerMask;
+    private bool hitByWall = false;
+    [SerializeField] private Transform raypos;
+    [SerializeField] private Vector3[] rayRot;
+    private Vector3 assignRot;
 
-    //ICasualJump casualJump;
-    //public Vector3 rayRotation;
-    //[SerializeField] private List<GameObject> hitobj = new List<GameObject>();
+    IStopPlayer stopPlayer;
+    private void Start()
+    {
+        stopPlayer = GetComponent<IStopPlayer>();
+    }
+    void Update()
+    {
+        Raycast();
+    }
 
-    //private bool isMoving = false;
+    private void Raycast()
+    {
 
-
-
-    //public void Start()
-    //{
-    //    casualJump = GetComponent<ICasualJump>();
-    //}
-
-
-    //private void Update()
-    //{
-    //  if (!isMoving || casualJump.EmptySpaceJump() )
-    //    {
-    //        casualJump.EmptySpaceJump();
-    //        Debug.Log("EmptySpaceJump"+casualJump.EmptySpaceJump());
-    //    }
-    //}
-
-    //public void DistanceCheck()
-    //{
-    //  if (!isMoving)
-    //  {
-
-        
-    //    RaycastHit hit;
-    //    Vector3 forwardNoY = player.TransformDirection(rayRotation.normalized);
-    //        if (Physics.Raycast(player.transform.position, forwardNoY, out hit, rayDistance, layerMask))
-    //        {
-    //            Debug.Log("hit");
-
-
-    //            Transform hitTransform = hit.transform;
-    //            if (hitTransform != null)
-    //            {
-    //                Vector3 worldPosition = hit.point;
-    //                Vector3 coordinates = new Vector3(worldPosition.x,
-    //                                                  worldPosition.y ,
-    //                                                  worldPosition.z) ;
-
-    //                // Output the coordinates to the console
-    //                Debug.Log("Coordinates at " + rayDistance + "m distance: " + coordinates);
-                  
-    //                //---------------------------------------------------------------------------------------
-                 
-    //                MoveObject(coordinates );
-
-                    
-
-
-    //            }
-
-    //        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
             
-    //    }
-
-
-    //}
-
-  
-
-    //private void MoveObject(Vector3 targetPosition)
-    //{
-       
-    //    StartCoroutine(MovePlayerSmoothly(targetPosition));
-    //}
-
-    //private IEnumerator MovePlayerSmoothly(Vector3 targetPosition)
-    //{
-    //    isMoving = true;
-    //    while ( player.transform.position != targetPosition )
-    //    {
-    //        float translation = speed * Time.deltaTime;
-    //       player.transform.position = Vector3.MoveTowards(player.position, targetPosition , translation);
+           
+           
+                assignRot = rayRot[1];
             
+           
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            assignRot = rayRot[0];
+        }
 
-    //        yield return null;
-    //    }
-    //    isMoving = false;
+        RaycastHit hit;
        
-    //    Debug.Log("Player reached the target position or movement was stopped.");
-      
 
-    //}
+       
+        if (Physics.Raycast(raypos.position, raypos.TransformDirection(assignRot), out hit, raycastDistance, layerMask))
+        {
+            Debug.Log("Hit wall by raycast");
+            hitByWall = true;
+            stopPlayer.StopPlayer();
+        }
+        else
+        {
+            hitByWall = false;
+        }
+    }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Vector3 forward = player.TransformDirection(rayRotation.normalized);
-
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawLine(player.position, player.position + forward * rayDistance);
-    //}
-
-   
+    public void OnDrawGizmos()
+    {
+        // Draw the ray in the Scene view for visualization purposes
+        Gizmos.color = Color.white;
+        Gizmos.DrawRay(raypos.position, raypos.TransformDirection(assignRot) * raycastDistance);
+    }
 }

@@ -53,5 +53,10 @@ public interface IJumpAnim
 
 }
 
+public interface IStopPlayer
+    {
+    void StopPlayer();
+
+    }
 
 

@@ -43,7 +43,7 @@ public class PlayerAnimationController : MonoBehaviour, IKeyboardCntrl,IKeyboard
     {
         Debug.Log("Jump anim true");
         spaceBoy.SetBool("isJump", true);
-    }
+    } 
     public void StopJumpAnim()
     {
         spaceBoy.SetBool("isJump", false);

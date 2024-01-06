@@ -51,21 +51,21 @@ public class HologramSpaceboy : MonoBehaviour, IRayDetection
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) ||
             Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            ActivateHologram(rotationEffectAngle, rotationEffectAngle, rotationEffectAngle);
+            ActivateHologram(rotationEffectAngle, rotationEffectAngle);
         }
     }
 
-    private Quaternion ActivateHologram(float xRotation, float yPosition, float zRotation)
+    private Quaternion ActivateHologram(float xRotation, float zRotation)
     {
         Quaternion currentRotation = spaceBoy.transform.rotation;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            currentRotation = Quaternion.Euler(0, yPosition, currentRotation.eulerAngles.z - zRotation);
+            currentRotation *= Quaternion.Euler(0, 0, -zRotation);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            currentRotation = Quaternion.Euler(0, yPosition, currentRotation.eulerAngles.z  +zRotation);
+            currentRotation *= Quaternion.Euler(0, 0, zRotation);
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {

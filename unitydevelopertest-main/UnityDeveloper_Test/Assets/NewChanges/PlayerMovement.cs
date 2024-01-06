@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-public class PlayerMovement :MonoBehaviour, IKeyboardCntrl, IKeyboardCntrlNone
+public class PlayerMovement :MonoBehaviour, IKeyboardCntrl, IKeyboardCntrlNone, IStopPlayer
 {
     public Transform spaceBoy;
      float moveSpeed = 0;
@@ -14,6 +14,7 @@ public class PlayerMovement :MonoBehaviour, IKeyboardCntrl, IKeyboardCntrlNone
     public static PlayerMovement instance;
     IKeyboardCntrlNone keyboardCntrlNone;
     IKeyboardCntrl keyboardCntrl;
+    IRayDetection rayDetection;
    
     private void Awake()
     {
@@ -24,14 +25,18 @@ public class PlayerMovement :MonoBehaviour, IKeyboardCntrl, IKeyboardCntrlNone
     {
         keyboardCntrlNone = GetComponent<IKeyboardCntrlNone>();
         keyboardCntrl = GetComponent<IKeyboardCntrl>();
+        rayDetection = GetComponent<IRayDetection>();
     }
     void Update()
-    {   MoveForward();
-        MoveBackward();
-        MoveLeft();
-       MoveRight();
-        IdlePlayer();
-       
+    {if (!rayDetection.DistanceCheck())
+        {
+            MoveForward();
+            MoveBackward();
+            MoveLeft();
+            MoveRight();
+        }
+            IdlePlayer();
+        
 
     }
 
@@ -91,6 +96,9 @@ public class PlayerMovement :MonoBehaviour, IKeyboardCntrl, IKeyboardCntrlNone
         }
     }
 
-    
+    public void StopPlayer()
+    {
+        moveSpeed = 0;
+    }
 
     }
